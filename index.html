@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lineage 2 Calculator - Game Tools</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Lineage 2 Calculator</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="calculator-hero">
+            <div class="hero-content">
+                <h1>Lineage 2 Calculator</h1>
+                <p>Essential tools for your adventure in Aden</p>
+            </div>
+        </section>
+
+        <section class="calculator-section">
+            <div class="calculator-container">
+                <div class="calculator-tabs">
+                    <button class="tab-button active" data-tab="damage">Damage Penalty</button>
+                    <button class="tab-button" data-tab="adena">Adena Calculator</button>
+                    <button class="tab-button" data-tab="hourly">XP and Adena</button>
+                </div>
+
+                <!-- Damage Calculator -->
+                <div class="calculator-content active" id="damage">
+                    <h2>Damage Penalty Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="form-group">
+                            <label for="your-level">Your Level:</label>
+                            <input type="number" id="your-level" placeholder="Enter your level" min="1" max="130">
+                        </div>
+                        <div class="form-group">
+                            <label for="mob-level">Mob Level:</label>
+                            <input type="number" id="mob-level" placeholder="Enter mob level" min="1" max="130">
+                        </div>
+                        <button class="calculate-btn" onclick="calculateDamagePenalty()">Calculate Damage Penalty</button>
+                    </div>
+                    <div class="result" id="damage-result">
+                        <h3>Damage Penalty Results:</h3>
+                        <div class="result-grid">
+                            <div class="result-item">
+                                <span class="label">Penalty (divider):</span>
+                                <span class="value" id="penalty-divider">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Damage Reduction:</span>
+                                <span class="value" id="damage-reduction">-</span>
+                            </div>
+                        </div>
+                    </div>
+                                 </div>
+
+                 <!-- Adena Calculator -->
+                <div class="calculator-content" id="adena">
+                    <h2>Adena Cost Calculator</h2>
+                    <div class="calculator-form">
+                        <div class="form-group">
+                            <label for="adena-amount">Adena Amount:</label>
+                            <input type="number" id="adena-amount" placeholder="Enter adena amount" step="0.1" min="0" value="10">
+                            <span class="unit">billion Adena</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="buy-price">Adena Buy Price:</label>
+                            <input type="number" id="buy-price" placeholder="Enter buy price" step="0.01" min="0" value="7.00">
+                            <span class="unit">$ per billion</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="sell-price">Adena Sell Price:</label>
+                            <input type="number" id="sell-price" placeholder="Enter sell price" step="0.01" min="0" value="8.00">
+                            <span class="unit">$ per billion</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="coin-price">Price for 10,000 Coins:</label>
+                            <input type="number" id="coin-price" placeholder="Enter coin price" step="0.01" min="0" value="7.00">
+                            <span class="unit">$ USD</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="coin-amount">Amount of Coins to Buy:</label>
+                            <input type="number" id="coin-amount" placeholder="Enter coin amount" step="1000" min="0" value="10000">
+                            <span class="unit">coins</span>
+                        </div>
+                        <button class="calculate-btn" onclick="calculateAdena()">Calculate Adena Costs</button>
+                    </div>
+                    <div class="result" id="adena-result">
+                        <h3>Adena Calculation Results:</h3>
+                        <div class="result-grid">
+                            <div class="result-item">
+                                <span class="label">Cost to Buy Adena:</span>
+                                <span class="value" id="buy-cost">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Revenue from Selling Adena:</span>
+                                <span class="value" id="sell-revenue">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Profit/Loss:</span>
+                                <span class="value" id="profit">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Adena needed for 10k Coins:</span>
+                                <span class="value" id="adena-for-coins">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Cost to buy that Adena:</span>
+                                <span class="value" id="adena-for-coins-cost">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Total Cost for Selected Coins:</span>
+                                <span class="value" id="total-coin-cost">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Adena needed for selected coins:</span>
+                                <span class="value" id="adena-for-selected-coins">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Cost to buy that Adena:</span>
+                                <span class="value" id="adena-cost-for-selected-coins">-</span>
+                            </div>
+                        </div>
+                                         </div>
+                 </div>
+
+                 <!-- Hourly Rate Calculator -->
+                 <div class="calculator-content" id="hourly">
+                     <h2>⚔️ XP and Adena Hourly Rate Calculator</h2>
+                     <div class="calculator-form">
+                         <div class="form-group">
+                             <label for="hourly-amount">💰 XP or Adena Amount:</label>
+                             <input type="text" id="hourly-amount" placeholder="Enter amount (e.g., 1,000,000)" inputmode="decimal">
+                         </div>
+                         <div class="form-group">
+                             <label for="hourly-hours">⏱️ Hours:</label>
+                             <input type="number" id="hourly-hours" placeholder="Hours" min="0" step="1" value="0">
+                         </div>
+                         <div class="form-group">
+                             <label for="hourly-minutes">⏱️ Minutes:</label>
+                             <input type="number" id="hourly-minutes" placeholder="Minutes" min="0" max="59" step="1" value="0">
+                         </div>
+                         <button class="calculate-btn" onclick="calculateHourlyRate()">Calculate Hourly Rate</button>
+                     </div>
+                     <div class="result" id="hourly-result">
+                         <h3>Hourly Rate Results:</h3>
+                         <div class="result-grid">
+                             <div class="result-item">
+                                 <span class="label">Hourly Rate:</span>
+                                 <span class="value" id="hourly-rate">-</span>
+                             </div>
+                             <div class="result-item">
+                                 <span class="label">Amount for 1 hour:</span>
+                                 <span class="value" id="one-hour-amount">-</span>
+                             </div>
+                             <div class="result-item">
+                                 <span class="label">Amount for 3 hours:</span>
+                                 <span class="value" id="three-hours-amount">-</span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </section>
+     </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+            <p>&copy; 2024 Lineage 2 Fan Website. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
