@@ -1,5 +1,20 @@
 // Tab switching functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for hero CTA
+    const heroCTA = document.querySelector('.hero-cta');
+    if (heroCTA) {
+        heroCTA.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector('#calculators');
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
+    
     const tabButtons = document.querySelectorAll('.tab-button');
     const calculatorContents = document.querySelectorAll('.calculator-content');
 
@@ -50,14 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const tooltips = {
         'your-level': 'Your character\'s current level',
         'mob-level': 'The level of the monster you are fighting',
-        'adena-amount': 'Amount of Adena in billions',
-        'buy-price': 'Price to buy Adena per billion',
-        'sell-price': 'Price to sell Adena per billion',
-        'coin-price': 'Price for 10,000 coins in USD',
-        'coin-amount': 'Amount of coins you want to buy',
         'hourly-amount': 'Amount of XP or Adena earned',
         'hourly-hours': 'Hours spent farming',
-        'hourly-minutes': 'Minutes spent farming'
+        'hourly-minutes': 'Minutes spent farming',
+        'adenaRate': 'Exchange rate: How much Adena equals 1 Dollar',
+        'itemPrice': 'The price of the item in the selected currency'
     };
 
     Object.keys(tooltips).forEach(id => {
@@ -114,6 +126,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Currency calculator event listeners
+    const adenaRateInput = document.getElementById('adenaRate');
+    const itemPriceInput = document.getElementById('itemPrice');
+    
+    if (adenaRateInput) {
+        adenaRateInput.addEventListener('input', function(e) {
+            formatCurrencyInput(e.target);
+            calculateCurrencyConversions();
+        });
+    }
+    
+    if (itemPriceInput) {
+        itemPriceInput.addEventListener('input', function(e) {
+            formatCurrencyInput(e.target);
+            calculateCurrencyConversions();
+        });
+    }
+
+    // Initial currency calculation
+    calculateCurrencyConversions();
 });
 
 // Damage Penalty Calculator
@@ -167,46 +200,6 @@ function calculateDamagePenalty() {
 
     // Show result section
     document.getElementById('damage-result').style.display = 'block';
-}
-
-// Adena Calculator
-function calculateAdena() {
-    const adenaAmount = parseFloat(document.getElementById('adena-amount').value) || 0;
-    const buyPrice = parseFloat(document.getElementById('buy-price').value) || 0;
-    const sellPrice = parseFloat(document.getElementById('sell-price').value) || 0;
-    const coinPrice = parseFloat(document.getElementById('coin-price').value) || 0;
-    const coinAmount = parseFloat(document.getElementById('coin-amount').value) || 0;
-
-    if (adenaAmount === 0 || buyPrice === 0 || sellPrice === 0 || coinPrice === 0 || coinAmount === 0) {
-        alert('Please enter valid values for all fields.');
-        return;
-    }
-
-    // Calculate basic adena trading
-    const buyCost = adenaAmount * buyPrice;
-    const sellRevenue = adenaAmount * sellPrice;
-    const profit = sellRevenue - buyCost;
-
-    // Calculate adena needed for 10k coins
-    const adenaNeededForCoins = sellPrice > 0 ? coinPrice / sellPrice : 0;
-    const costForCoinsAdena = adenaNeededForCoins * buyPrice;
-
-    // Calculate for selected coin amount
-    const adenaNeededForSelectedCoins = sellPrice > 0 ? (coinAmount / 10000) * coinPrice / sellPrice : 0;
-    const costForSelectedCoinsAdena = adenaNeededForSelectedCoins * buyPrice;
-
-    // Display results
-    document.getElementById('buy-cost').textContent = '$' + buyCost.toFixed(2);
-    document.getElementById('sell-revenue').textContent = '$' + sellRevenue.toFixed(2);
-    document.getElementById('profit').textContent = '$' + profit.toFixed(2);
-    document.getElementById('adena-for-coins').textContent = adenaNeededForCoins.toFixed(2) + ' billion';
-    document.getElementById('adena-for-coins-cost').textContent = '$' + costForCoinsAdena.toFixed(2);
-    document.getElementById('total-coin-cost').textContent = '$' + coinPrice.toFixed(2);
-    document.getElementById('adena-for-selected-coins').textContent = adenaNeededForSelectedCoins.toFixed(2) + ' billion';
-    document.getElementById('adena-cost-for-selected-coins').textContent = '$' + costForSelectedCoinsAdena.toFixed(2);
-
-    // Show result section
-    document.getElementById('adena-result').style.display = 'block';
 }
 
 // Hourly Rate Calculator
@@ -297,5 +290,106 @@ function formatCurrency(amount) {
         return 'K ' + formattedNumber;
     } else {
         return formattedNumber;
+    }
+}
+
+// Currency Calculator Functions
+let currentCurrency = 'coins';
+
+// Fixed conversion rate: 10000 coins = 7 dollars
+const COINS_TO_DOLLARS_RATE = 7 / 10000; // 1 coin = 0.0007 dollars
+
+function selectCurrency(currency) {
+    currentCurrency = currency;
+    
+    // Update active tab
+    document.querySelectorAll('.currency-tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // Update label
+    const labels = {
+        'coins': 'Item Price (Einhasad Coins):',
+        'dollars': 'Item Price (Dollars):',
+        'adena': 'Item Price (Adena):'
+    };
+    document.querySelector('label[for="itemPrice"]').textContent = labels[currency];
+    
+    // Recalculate
+    calculateCurrencyConversions();
+}
+
+function calculateCurrencyConversions() {
+    const itemPriceElement = document.getElementById('itemPrice');
+    const adenaRateElement = document.getElementById('adenaRate');
+    
+    if (!itemPriceElement || !adenaRateElement) return;
+    
+    const itemPriceValue = itemPriceElement.value.replace(/,/g, '');
+    const adenaRateValue = adenaRateElement.value.replace(/,/g, '');
+    
+    const itemPrice = parseFloat(itemPriceValue) || 0;
+    const adenaRate = parseFloat(adenaRateValue) || 1000000000;
+
+    let coins, dollars, adena;
+
+    // Convert input to all three currencies
+    if (currentCurrency === 'coins') {
+        coins = itemPrice;
+        dollars = coins * COINS_TO_DOLLARS_RATE;
+        adena = dollars * adenaRate;
+    } else if (currentCurrency === 'dollars') {
+        dollars = itemPrice;
+        coins = dollars / COINS_TO_DOLLARS_RATE;
+        adena = dollars * adenaRate;
+    } else if (currentCurrency === 'adena') {
+        adena = itemPrice;
+        dollars = adena / adenaRate;
+        coins = dollars / COINS_TO_DOLLARS_RATE;
+    }
+
+    // Display results
+    const coinsResultElement = document.getElementById('coinsResult');
+    const dollarsResultElement = document.getElementById('dollarsResult');
+    const adenaResultElement = document.getElementById('adenaResult');
+    
+    if (coinsResultElement) {
+        coinsResultElement.textContent = formatNumberDisplay(coins, 2);
+    }
+    if (dollarsResultElement) {
+        dollarsResultElement.textContent = '$' + formatNumberDisplay(dollars, 2);
+    }
+    if (adenaResultElement) {
+        adenaResultElement.textContent = formatNumberDisplay(adena, 0);
+    }
+}
+
+function formatNumberDisplay(num, decimals) {
+    if (isNaN(num) || num === null) return '0';
+    return num.toLocaleString('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
+}
+
+// Format input with commas while typing for currency calculator
+function formatCurrencyInput(input) {
+    let value = input.value.replace(/,/g, '');
+    
+    // Allow decimal point and numbers only
+    value = value.replace(/[^\d.]/g, '');
+    
+    // Prevent multiple decimal points
+    const parts = value.split('.');
+    if (parts.length > 2) {
+        value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    
+    // Format with commas
+    if (value) {
+        const [integerPart, decimalPart] = value.split('.');
+        const formattedInteger = parseInt(integerPart || '0').toLocaleString('en-US');
+        input.value = decimalPart !== undefined ? formattedInteger + '.' + decimalPart : formattedInteger;
     }
 }

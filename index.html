@@ -23,14 +23,50 @@
 
     <main>
         <section class="calculator-hero">
+            <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1>Lineage 2 Calculator</h1>
-                <p>Essential tools for your adventure in Aden</p>
+                <div class="hero-badge">
+                    <i class="fas fa-calculator"></i>
+                    <span>Professional Gaming Tools</span>
+                </div>
+                <h1>Lineage 2 Calculator Suite</h1>
+                <p class="hero-subtitle">Advanced calculators for damage, currency, and XP tracking</p>
+                <div class="hero-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sword"></i>
+                        </div>
+                        <h3>Damage Analysis</h3>
+                        <p>Calculate penalty ratios</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h3>Currency Converter</h3>
+                        <p>Adena, Coins & Dollars</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>XP Tracking</h3>
+                        <p>Hourly rate calculator</p>
+                    </div>
+                </div>
+                <a href="#calculators" class="hero-cta">
+                    <span>Start Calculating</span>
+                    <i class="fas fa-arrow-down"></i>
+                </a>
             </div>
         </section>
 
-        <section class="calculator-section">
+        <section class="calculator-section" id="calculators">
             <div class="calculator-container">
+                <div class="section-header">
+                    <h2>Choose Your Calculator</h2>
+                    <p>Select a tool below to get started with your calculations</p>
+                </div>
                 <div class="calculator-tabs">
                     <button class="tab-button active" data-tab="damage">Damage Penalty</button>
                     <button class="tab-button" data-tab="adena">Adena Calculator</button>
@@ -66,74 +102,56 @@
                     </div>
                                  </div>
 
-                 <!-- Adena Calculator -->
-                <div class="calculator-content" id="adena">
-                    <h2>Adena Cost Calculator</h2>
-                    <div class="calculator-form">
-                        <div class="form-group">
-                            <label for="adena-amount">Adena Amount:</label>
-                            <input type="number" id="adena-amount" placeholder="Enter adena amount" step="0.1" min="0" value="10">
-                            <span class="unit">billion Adena</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="buy-price">Adena Buy Price:</label>
-                            <input type="number" id="buy-price" placeholder="Enter buy price" step="0.01" min="0" value="7.00">
-                            <span class="unit">$ per billion</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="sell-price">Adena Sell Price:</label>
-                            <input type="number" id="sell-price" placeholder="Enter sell price" step="0.01" min="0" value="8.00">
-                            <span class="unit">$ per billion</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="coin-price">Price for 10,000 Coins:</label>
-                            <input type="number" id="coin-price" placeholder="Enter coin price" step="0.01" min="0" value="7.00">
-                            <span class="unit">$ USD</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="coin-amount">Amount of Coins to Buy:</label>
-                            <input type="number" id="coin-amount" placeholder="Enter coin amount" step="1000" min="0" value="10000">
-                            <span class="unit">coins</span>
-                        </div>
-                        <button class="calculate-btn" onclick="calculateAdena()">Calculate Adena Costs</button>
-                    </div>
-                    <div class="result" id="adena-result">
-                        <h3>Adena Calculation Results:</h3>
-                        <div class="result-grid">
-                            <div class="result-item">
-                                <span class="label">Cost to Buy Adena:</span>
-                                <span class="value" id="buy-cost">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Revenue from Selling Adena:</span>
-                                <span class="value" id="sell-revenue">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Profit/Loss:</span>
-                                <span class="value" id="profit">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Adena needed for 10k Coins:</span>
-                                <span class="value" id="adena-for-coins">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Cost to buy that Adena:</span>
-                                <span class="value" id="adena-for-coins-cost">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Total Cost for Selected Coins:</span>
-                                <span class="value" id="total-coin-cost">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Adena needed for selected coins:</span>
-                                <span class="value" id="adena-for-selected-coins">-</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="label">Cost to buy that Adena:</span>
-                                <span class="value" id="adena-cost-for-selected-coins">-</span>
-                            </div>
-                        </div>
-                                         </div>
+                 <!-- Adena Currency Calculator -->
+                 <div class="calculator-content" id="adena">
+                     <h2>💰 Currency Converter</h2>
+                     
+                     <div class="exchange-rate-section">
+                         <h3>Exchange Rates</h3>
+                         
+                         <div class="fixed-rate">
+                             🪙 Fixed: 10,000 Einhasad Coins = $7 USD
+                         </div>
+
+                         <div class="form-group">
+                             <label for="adenaRate">Adena to Dollar Exchange Rate:</label>
+                             <input type="text" id="adenaRate" value="1,000,000,000" placeholder="Enter Adena per 1 Dollar">
+                             <span class="unit">1 Dollar = ? Adena (Default: 1,000,000,000)</span>
+                         </div>
+                     </div>
+
+                     <div class="currency-calculator-section">
+                         <h3>Item Price Calculator</h3>
+                         
+                         <div class="currency-tabs">
+                             <button class="currency-tab-button active" onclick="selectCurrency('coins')">Einhasad Coins</button>
+                             <button class="currency-tab-button" onclick="selectCurrency('dollars')">Dollars</button>
+                             <button class="currency-tab-button" onclick="selectCurrency('adena')">Adena</button>
+                         </div>
+
+                         <div class="form-group">
+                             <label for="itemPrice">Item Price (Einhasad Coins):</label>
+                             <input type="text" id="itemPrice" value="0" placeholder="Enter item price">
+                         </div>
+
+                         <div class="result" id="currency-results" style="display: block;">
+                             <h3>Conversion Results:</h3>
+                             <div class="result-grid">
+                                 <div class="result-item">
+                                     <span class="label">🪙 Einhasad Coins:</span>
+                                     <span class="value" id="coinsResult">0</span>
+                                 </div>
+                                 <div class="result-item">
+                                     <span class="label">💵 Dollars:</span>
+                                     <span class="value" id="dollarsResult">$0.00</span>
+                                 </div>
+                                 <div class="result-item">
+                                     <span class="label">💎 Adena:</span>
+                                     <span class="value" id="adenaResult">0</span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
                  </div>
 
                  <!-- Hourly Rate Calculator -->
