@@ -84,7 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (hourlyAmountInput) {
         hourlyAmountInput.addEventListener('input', function() {
             formatNumber(this);
-            if (this.value && (document.getElementById('hourly-hours').value || document.getElementById('hourly-minutes').value)) {
+            const hours = parseInt(document.getElementById('hourly-hours').value) || 0;
+            const minutes = parseInt(document.getElementById('hourly-minutes').value) || 0;
+            if (this.value && (hours > 0 || minutes > 0)) {
                 setTimeout(calculateHourlyRate, 500); // Debounce the calculation
             }
         });
@@ -96,7 +98,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (hourlyHoursInput) {
         hourlyHoursInput.addEventListener('input', function() {
-            if (this.value && document.getElementById('hourly-amount').value) {
+            const hours = parseInt(this.value) || 0;
+            const minutes = parseInt(document.getElementById('hourly-minutes').value) || 0;
+            const amount = parseFormattedNumber(document.getElementById('hourly-amount').value);
+            if ((hours > 0 || minutes > 0) && !isNaN(amount) && amount > 0) {
                 setTimeout(calculateHourlyRate, 500); // Debounce the calculation
             }
         });
@@ -104,7 +109,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (hourlyMinutesInput) {
         hourlyMinutesInput.addEventListener('input', function() {
-            if (this.value && document.getElementById('hourly-amount').value) {
+            const hours = parseInt(document.getElementById('hourly-hours').value) || 0;
+            const minutes = parseInt(this.value) || 0;
+            const amount = parseFormattedNumber(document.getElementById('hourly-amount').value);
+            if ((hours > 0 || minutes > 0) && !isNaN(amount) && amount > 0) {
                 setTimeout(calculateHourlyRate, 500); // Debounce the calculation
             }
         });
