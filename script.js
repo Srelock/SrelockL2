@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
             button.classList.add('active');
             document.getElementById(targetTab).classList.add('active');
             
+            // Initialize armor calculator when switching to armor tab
+            if (targetTab === 'armor') {
+                updateArmorTotals();
+            }
+            
             // Smooth scroll to the calculator section
             const calculatorSection = document.querySelector('.calculator-section');
             if (calculatorSection) {
