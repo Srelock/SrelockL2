@@ -155,6 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial currency calculation
     calculateCurrencyConversions();
+    
+    // Initialize armor calculator if on armor tab
+    if (document.getElementById('armor')) {
+        updateArmorTotals();
+    }
 });
 
 // Damage Penalty Calculator
@@ -400,4 +405,178 @@ function formatCurrencyInput(input) {
         const formattedInteger = parseInt(integerPart || '0').toLocaleString('en-US');
         input.value = decimalPart !== undefined ? formattedInteger + '.' + decimalPart : formattedInteger;
     }
+}
+
+// ==================== Armor Calculator Functions ====================
+
+const armorMaterials = {
+    helmet: {
+        "Crystal of Protection": 3710,
+        "Aether": 76500,
+        "Solaris": 520,
+        "Jewel": 2080,
+        "Adena": 1511640000
+    },
+    chest: {
+        "Crystal of Protection": 9892,
+        "Aether": 210296,
+        "Solaris": 1540,
+        "Jewel": 5548,
+        "Adena": 4032009000
+    },
+    gloves: {
+        "Crystal of Protection": 2473,
+        "Aether": 57296,
+        "Solaris": 501,
+        "Jewel": 1392,
+        "Adena": 1011636000
+    },
+    boots: {
+        "Crystal of Protection": 2473,
+        "Aether": 57296,
+        "Solaris": 501,
+        "Jewel": 1392,
+        "Adena": 1011636000
+    },
+    gaiters: {
+        "Crystal of Protection": 6183,
+        "Aether": 133796,
+        "Solaris": 1020,
+        "Jewel": 3468,
+        "Adena": 2520369000
+    }
+};
+
+function formatArmorNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function parseArmorFormattedNumber(value) {
+    return parseFloat(value.replace(/,/g, '')) || 0;
+}
+
+function formatArmorPriceInput(input) {
+    const cursorPosition = input.selectionStart;
+    const oldValue = input.value;
+    
+    let numericValue = oldValue.replace(/[^\d]/g, '');
+    
+    if (numericValue) {
+        const formatted = parseInt(numericValue).toLocaleString();
+        input.value = formatted;
+        
+        const commasBefore = (oldValue.substring(0, cursorPosition).match(/,/g) || []).length;
+        const commasAfter = (formatted.substring(0, cursorPosition).match(/,/g) || []).length;
+        const newPosition = cursorPosition + (commasAfter - commasBefore);
+        input.setSelectionRange(newPosition, newPosition);
+    }
+    
+    updateArmorCosts();
+}
+
+function updateArmorTotals() {
+    const totals = {};
+    
+    for (const piece in armorMaterials) {
+        const checkbox = document.getElementById(piece);
+        const pieceElement = document.getElementById(`piece-${piece}`);
+        
+        if (checkbox && checkbox.checked) {
+            if (pieceElement) pieceElement.classList.remove('disabled');
+            for (const material in armorMaterials[piece]) {
+                if (!totals[material]) {
+                    totals[material] = 0;
+                }
+                totals[material] += armorMaterials[piece][material];
+            }
+        } else {
+            if (pieceElement) pieceElement.classList.add('disabled');
+        }
+    }
+
+    const totalsGrid = document.getElementById('armor-totals-grid');
+    if (totalsGrid) {
+        totalsGrid.innerHTML = '';
+        
+        for (const material in totals) {
+            const totalItem = document.createElement('div');
+            totalItem.className = 'armor-total-item';
+            let displayValue;
+            if (material === 'Adena') {
+                displayValue = '10.5B';
+            } else {
+                displayValue = formatArmorNumber(totals[material]);
+            }
+            totalItem.innerHTML = `
+                <div class="armor-total-item-name">${material}</div>
+                <div class="armor-total-item-amount">${displayValue}</div>
+            `;
+            totalsGrid.appendChild(totalItem);
+        }
+    }
+    
+    updateArmorCosts();
+}
+
+function updateArmorCosts() {
+    const totals = {};
+    for (const piece in armorMaterials) {
+        const checkbox = document.getElementById(piece);
+        if (checkbox && checkbox.checked) {
+            for (const material in armorMaterials[piece]) {
+                if (!totals[material]) {
+                    totals[material] = 0;
+                }
+                totals[material] += armorMaterials[piece][material];
+            }
+        }
+    }
+
+    const aetherAdenaPrice = parseArmorFormattedNumber(document.getElementById('aether-adena-price')?.value || '0');
+    const aetherConquestPrice = parseArmorFormattedNumber(document.getElementById('aether-conquest-price')?.value || '0');
+    const solarisAdenaPrice = parseArmorFormattedNumber(document.getElementById('solaris-adena-price')?.value || '0');
+    const solarisConquestPrice = parseArmorFormattedNumber(document.getElementById('solaris-conquest-price')?.value || '0');
+
+    const aetherCount = totals['Aether'] || 0;
+    const solarisCount = totals['Solaris'] || 0;
+
+    const aetherAdenaCost = aetherCount * aetherAdenaPrice;
+    const aetherConquestCost = aetherCount * aetherConquestPrice;
+    const solarisAdenaCost = solarisCount * solarisAdenaPrice;
+    const solarisConquestCost = solarisCount * solarisConquestPrice;
+
+    const totalAdenaCost = aetherAdenaCost + solarisAdenaCost;
+    const totalConquestCost = aetherConquestCost + solarisConquestCost;
+
+    const aetherAdenaCostEl = document.getElementById('aether-adena-cost');
+    const solarisAdenaCostEl = document.getElementById('solaris-adena-cost');
+    const totalAdenaCostEl = document.getElementById('total-adena-cost');
+    const aetherConquestCostEl = document.getElementById('aether-conquest-cost');
+    const solarisConquestCostEl = document.getElementById('solaris-conquest-cost');
+    const totalConquestCostEl = document.getElementById('total-conquest-cost');
+
+    if (aetherAdenaCostEl) aetherAdenaCostEl.textContent = formatArmorNumber(Math.round(aetherAdenaCost));
+    if (solarisAdenaCostEl) solarisAdenaCostEl.textContent = formatArmorNumber(Math.round(solarisAdenaCost));
+    if (totalAdenaCostEl) totalAdenaCostEl.textContent = formatArmorNumber(Math.round(totalAdenaCost));
+    if (aetherConquestCostEl) aetherConquestCostEl.textContent = formatArmorNumber(Math.round(aetherConquestCost));
+    if (solarisConquestCostEl) solarisConquestCostEl.textContent = formatArmorNumber(Math.round(solarisConquestCost));
+    if (totalConquestCostEl) totalConquestCostEl.textContent = formatArmorNumber(Math.round(totalConquestCost));
+}
+
+function selectAllArmor() {
+    const checkboxes = ['helmet', 'chest', 'gloves', 'boots', 'gaiters'];
+    checkboxes.forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) checkbox.checked = true;
+    });
+    updateArmorTotals();
+}
+
+function deselectAllArmor() {
+    const checkboxes = ['helmet', 'chest', 'gloves', 'boots', 'gaiters'];
+    checkboxes.forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) checkbox.checked = false;
+    });
+    updateArmorTotals();
 }

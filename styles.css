@@ -584,6 +584,293 @@ footer {
     }
 }
 
+/* Armor Calculator Styles */
+.armor-controls {
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.armor-controls h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.armor-piece-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.armor-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    background: rgba(30, 41, 59, 0.5);
+    border: 2px solid var(--light-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.armor-checkbox:hover {
+    border-color: var(--primary-color);
+    background: rgba(30, 41, 59, 0.8);
+    transform: translateY(-2px);
+}
+
+.armor-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.armor-button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.armor-select-btn, .armor-deselect-btn {
+    flex: 1;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.armor-select-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.armor-select-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.armor-deselect-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+}
+
+.armor-deselect-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+}
+
+.armor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.armor-piece-card {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.armor-piece-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.armor-piece-card.disabled {
+    opacity: 0.4;
+    filter: grayscale(100%);
+}
+
+.armor-piece-card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.armor-material-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.armor-material-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 6px;
+    color: var(--text-secondary);
+}
+
+.armor-material-item span:last-child {
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.armor-totals {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(245, 87, 108, 0.2));
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.armor-totals h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+}
+
+.armor-total-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.armor-total-item {
+    background: rgba(30, 41, 59, 0.6);
+    padding: 1rem;
+    border-radius: 10px;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    text-align: center;
+}
+
+.armor-total-item-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.armor-total-item-amount {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.armor-cost-calculator {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 2rem;
+    border-radius: 15px;
+}
+
+.armor-cost-calculator h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+}
+
+.armor-cost-desc {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.armor-price-config {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 1.5rem;
+    border-radius: 10px;
+}
+
+.armor-price-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.armor-price-item label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.armor-price-item input {
+    padding: 0.8rem;
+    border: 2px solid var(--light-bg);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    color: var(--text-primary);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.armor-price-item input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.armor-cost-totals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.armor-cost-section {
+    background: rgba(30, 41, 59, 0.5);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+}
+
+.armor-cost-section h4 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.armor-cost-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.armor-cost-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.armor-cost-line.armor-cost-total {
+    background: rgba(6, 182, 212, 0.2);
+    border: 2px solid rgba(6, 182, 212, 0.4);
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.armor-cost-line span:last-child {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .calculator-hero {
