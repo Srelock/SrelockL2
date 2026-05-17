@@ -30,29 +30,29 @@
                     <span>Professional Gaming Tools</span>
                 </div>
                 <h1>Lineage 2 Calculator Suite</h1>
-                <p class="hero-subtitle">Advanced calculators for damage, currency, and XP tracking</p>
+                <p class="hero-subtitle">Damage, armor upgrades, and XP tracking</p>
                 <div class="hero-features">
-                    <div class="feature-card">
+                    <a href="#damage" class="feature-card" data-tab="damage">
                         <div class="feature-icon">
-                            <i class="fas fa-sword"></i>
+                            <i class="fas fa-bolt"></i>
                         </div>
                         <h3>Damage Analysis</h3>
                         <p>Calculate penalty ratios</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-coins"></i>
-                        </div>
-                        <h3>Currency Converter</h3>
-                        <p>Adena, Coins & Dollars</p>
-                    </div>
-                    <div class="feature-card">
+                    </a>
+                    <a href="#hourly" class="feature-card" data-tab="hourly">
                         <div class="feature-icon">
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <h3>XP Tracking</h3>
                         <p>Hourly rate calculator</p>
-                    </div>
+                    </a>
+                    <a href="#armor" class="feature-card" data-tab="armor">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield"></i>
+                        </div>
+                        <h3>Armor Upgrade</h3>
+                        <p>L-grade crafting materials</p>
+                    </a>
                 </div>
                 <a href="#calculators" class="hero-cta">
                     <span>Start Calculating</span>
@@ -69,8 +69,8 @@
                 </div>
                 <div class="calculator-tabs">
                     <button class="tab-button active" data-tab="damage">Damage Penalty</button>
-                    <button class="tab-button" data-tab="adena">Adena Calculator</button>
                     <button class="tab-button" data-tab="hourly">XP and Adena</button>
+                    <button class="tab-button" data-tab="armor">Armor Upgrade</button>
                 </div>
 
                 <!-- Damage Calculator -->
@@ -101,60 +101,7 @@
                         </div>
                     </div>
                                  </div>
-
-                 <!-- Adena Currency Calculator -->
-                 <div class="calculator-content" id="adena">
-                     <h2>💰 Currency Converter</h2>
-                     
-                     <div class="exchange-rate-section">
-                         <h3>Exchange Rates</h3>
-                         
-                         <div class="fixed-rate">
-                             🪙 Fixed: 10,000 Einhasad Coins = $7 USD
-                         </div>
-
-                         <div class="form-group">
-                             <label for="adenaRate">Adena to Dollar Exchange Rate:</label>
-                             <input type="text" id="adenaRate" value="1,000,000,000" placeholder="Enter Adena per 1 Dollar">
-                             <span class="unit">1 Dollar = ? Adena (Default: 1,000,000,000)</span>
-                         </div>
-                     </div>
-
-                     <div class="currency-calculator-section">
-                         <h3>Item Price Calculator</h3>
-                         
-                         <div class="currency-tabs">
-                             <button class="currency-tab-button active" onclick="selectCurrency('coins')">Einhasad Coins</button>
-                             <button class="currency-tab-button" onclick="selectCurrency('dollars')">Dollars</button>
-                             <button class="currency-tab-button" onclick="selectCurrency('adena')">Adena</button>
-                         </div>
-
-                         <div class="form-group">
-                             <label for="itemPrice">Item Price (Einhasad Coins):</label>
-                             <input type="text" id="itemPrice" value="0" placeholder="Enter item price">
-                         </div>
-
-                         <div class="result" id="currency-results" style="display: block;">
-                             <h3>Conversion Results:</h3>
-                             <div class="result-grid">
-                                 <div class="result-item">
-                                     <span class="label">🪙 Einhasad Coins:</span>
-                                     <span class="value" id="coinsResult">0</span>
-                                 </div>
-                                 <div class="result-item">
-                                     <span class="label">💵 Dollars:</span>
-                                     <span class="value" id="dollarsResult">$0.00</span>
-                                 </div>
-                                 <div class="result-item">
-                                     <span class="label">💎 Adena:</span>
-                                     <span class="value" id="adenaResult">0</span>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-
-                 <!-- Hourly Rate Calculator -->
+                <!-- Hourly Rate Calculator -->
                  <div class="calculator-content" id="hourly">
                      <h2>⚔️ XP and Adena Hourly Rate Calculator</h2>
                      <div class="calculator-form">
@@ -190,6 +137,106 @@
                          </div>
                      </div>
                  </div>
+
+                <!-- Armor Upgrade Calculator -->
+                <div class="calculator-content" id="armor" data-armor="heavy">
+                    <h2>Equipment Upgrade</h2>
+                    <p class="armor-calc-intro">Armor crafting materials calculator — select your set and pieces</p>
+
+                    <div class="armor-type-tabs" role="tablist" aria-label="Armor type">
+                        <button type="button" class="armor-type-tab active" data-type="heavy" aria-selected="true">Heavy Armor</button>
+                        <button type="button" class="armor-type-tab" data-type="light" aria-selected="false">Light Armor</button>
+                        <button type="button" class="armor-type-tab" data-type="robe" aria-selected="false">Robe Armor</button>
+                    </div>
+
+                    <section class="armor-panel">
+                        <div class="armor-panel-header">Select Pieces</div>
+                        <div class="armor-panel-body">
+                            <div class="armor-piece-selector" id="armor-piece-selector"></div>
+                            <div class="armor-btn-group">
+                                <button type="button" class="armor-btn" onclick="selectAllArmorPieces()">Select All</button>
+                                <button type="button" class="armor-btn armor-btn--secondary" onclick="deselectAllArmorPieces()">Clear All</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="armor-panel">
+                        <div class="armor-panel-header">Required Materials</div>
+                        <div class="armor-panel-body">
+                            <div class="armor-grid" id="armor-grid"></div>
+                        </div>
+                    </section>
+
+                    <section class="armor-panel">
+                        <div class="armor-panel-header">Total Required</div>
+                        <div class="armor-panel-body">
+                            <div class="armor-totals-grid" id="armor-totals-grid"></div>
+                        </div>
+                    </section>
+
+                    <section class="armor-panel">
+                        <div class="armor-panel-header">Market Cost</div>
+                        <div class="armor-panel-body">
+                            <p class="armor-cost-note">Estimate adena and conquest points to purchase Aether and Solaris</p>
+                            <div class="armor-price-config">
+                                <div class="armor-price-item">
+                                    <label for="armor-aether-adena">Aether — Adena each</label>
+                                    <input type="text" id="armor-aether-adena" value="700,000" inputmode="numeric">
+                                </div>
+                                <div class="armor-price-item">
+                                    <label for="armor-aether-conquest">Aether — Conquest each</label>
+                                    <input type="text" id="armor-aether-conquest" value="7" inputmode="numeric">
+                                </div>
+                                <div class="armor-price-item">
+                                    <label for="armor-solaris-adena">Solaris — Adena each</label>
+                                    <input type="text" id="armor-solaris-adena" value="20,000,000" inputmode="numeric">
+                                </div>
+                                <div class="armor-price-item">
+                                    <label for="armor-solaris-conquest">Solaris — Conquest each</label>
+                                    <input type="text" id="armor-solaris-conquest" value="200" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="armor-cost-totals">
+                                <div class="armor-cost-section">
+                                    <h4>Adena Cost</h4>
+                                    <div class="armor-cost-breakdown">
+                                        <div class="armor-cost-line">
+                                            <span>Aether</span>
+                                            <span id="armor-aether-adena-cost">0</span>
+                                        </div>
+                                        <div class="armor-cost-line">
+                                            <span>Solaris</span>
+                                            <span id="armor-solaris-adena-cost">0</span>
+                                        </div>
+                                        <div class="armor-cost-line total-line">
+                                            <span>Total Adena</span>
+                                            <span id="armor-total-adena-cost">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="armor-cost-section">
+                                    <h4>Conquest Points</h4>
+                                    <div class="armor-cost-breakdown">
+                                        <div class="armor-cost-line">
+                                            <span>Aether</span>
+                                            <span id="armor-aether-conquest-cost">0</span>
+                                        </div>
+                                        <div class="armor-cost-line">
+                                            <span>Solaris</span>
+                                            <span id="armor-solaris-conquest-cost">0</span>
+                                        </div>
+                                        <div class="armor-cost-line total-line">
+                                            <span>Total Conquest</span>
+                                            <span id="armor-total-conquest-cost">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <p class="armor-credit">Designed by Vuti</p>
+                </div>
              </div>
          </section>
      </main>
@@ -204,5 +251,6 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="armor-calculator.js"></script>
 </body>
 </html>

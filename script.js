@@ -14,6 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    document.querySelectorAll('.feature-card[data-tab]').forEach(card => {
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tabName = this.getAttribute('data-tab');
+            navigateToCalculator(tabName);
+        });
+    });
     
     const tabButtons = document.querySelectorAll('.tab-button');
     const calculatorContents = document.querySelectorAll('.calculator-content');
@@ -67,9 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'mob-level': 'The level of the monster you are fighting',
         'hourly-amount': 'Amount of XP or Adena earned',
         'hourly-hours': 'Hours spent farming',
-        'hourly-minutes': 'Minutes spent farming',
-        'adenaRate': 'Exchange rate: How much Adena equals 1 Dollar',
-        'itemPrice': 'The price of the item in the selected currency'
+        'hourly-minutes': 'Minutes spent farming'
     };
 
     Object.keys(tooltips).forEach(id => {
@@ -135,26 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Currency calculator event listeners
-    const adenaRateInput = document.getElementById('adenaRate');
-    const itemPriceInput = document.getElementById('itemPrice');
-    
-    if (adenaRateInput) {
-        adenaRateInput.addEventListener('input', function(e) {
-            formatCurrencyInput(e.target);
-            calculateCurrencyConversions();
-        });
-    }
-    
-    if (itemPriceInput) {
-        itemPriceInput.addEventListener('input', function(e) {
-            formatCurrencyInput(e.target);
-            calculateCurrencyConversions();
-        });
-    }
-
-    // Initial currency calculation
-    calculateCurrencyConversions();
 });
 
 // Damage Penalty Calculator
@@ -250,12 +236,29 @@ function calculateHourlyRate() {
 function switchTab(tabName) {
     const tabButtons = document.querySelectorAll('.tab-button');
     const calculatorContents = document.querySelectorAll('.calculator-content');
-    
+
     tabButtons.forEach(btn => btn.classList.remove('active'));
     calculatorContents.forEach(content => content.classList.remove('active'));
-    
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-    document.getElementById(tabName).classList.add('active');
+
+    const tabButton = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
+    const panel = document.getElementById(tabName);
+    if (tabButton) {
+        tabButton.classList.add('active');
+    }
+    if (panel) {
+        panel.classList.add('active');
+    }
+}
+
+function navigateToCalculator(tabName) {
+    switchTab(tabName);
+    const panel = document.getElementById(tabName);
+    if (panel) {
+        panel.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
 }
 
 // Helper function to format number with commas
@@ -298,106 +301,5 @@ function formatCurrency(amount) {
         return 'K ' + formattedNumber;
     } else {
         return formattedNumber;
-    }
-}
-
-// Currency Calculator Functions
-let currentCurrency = 'coins';
-
-// Fixed conversion rate: 10000 coins = 7 dollars
-const COINS_TO_DOLLARS_RATE = 7 / 10000; // 1 coin = 0.0007 dollars
-
-function selectCurrency(currency) {
-    currentCurrency = currency;
-    
-    // Update active tab
-    document.querySelectorAll('.currency-tab-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Update label
-    const labels = {
-        'coins': 'Item Price (Einhasad Coins):',
-        'dollars': 'Item Price (Dollars):',
-        'adena': 'Item Price (Adena):'
-    };
-    document.querySelector('label[for="itemPrice"]').textContent = labels[currency];
-    
-    // Recalculate
-    calculateCurrencyConversions();
-}
-
-function calculateCurrencyConversions() {
-    const itemPriceElement = document.getElementById('itemPrice');
-    const adenaRateElement = document.getElementById('adenaRate');
-    
-    if (!itemPriceElement || !adenaRateElement) return;
-    
-    const itemPriceValue = itemPriceElement.value.replace(/,/g, '');
-    const adenaRateValue = adenaRateElement.value.replace(/,/g, '');
-    
-    const itemPrice = parseFloat(itemPriceValue) || 0;
-    const adenaRate = parseFloat(adenaRateValue) || 1000000000;
-
-    let coins, dollars, adena;
-
-    // Convert input to all three currencies
-    if (currentCurrency === 'coins') {
-        coins = itemPrice;
-        dollars = coins * COINS_TO_DOLLARS_RATE;
-        adena = dollars * adenaRate;
-    } else if (currentCurrency === 'dollars') {
-        dollars = itemPrice;
-        coins = dollars / COINS_TO_DOLLARS_RATE;
-        adena = dollars * adenaRate;
-    } else if (currentCurrency === 'adena') {
-        adena = itemPrice;
-        dollars = adena / adenaRate;
-        coins = dollars / COINS_TO_DOLLARS_RATE;
-    }
-
-    // Display results
-    const coinsResultElement = document.getElementById('coinsResult');
-    const dollarsResultElement = document.getElementById('dollarsResult');
-    const adenaResultElement = document.getElementById('adenaResult');
-    
-    if (coinsResultElement) {
-        coinsResultElement.textContent = formatNumberDisplay(coins, 2);
-    }
-    if (dollarsResultElement) {
-        dollarsResultElement.textContent = '$' + formatNumberDisplay(dollars, 2);
-    }
-    if (adenaResultElement) {
-        adenaResultElement.textContent = formatNumberDisplay(adena, 0);
-    }
-}
-
-function formatNumberDisplay(num, decimals) {
-    if (isNaN(num) || num === null) return '0';
-    return num.toLocaleString('en-US', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-    });
-}
-
-// Format input with commas while typing for currency calculator
-function formatCurrencyInput(input) {
-    let value = input.value.replace(/,/g, '');
-    
-    // Allow decimal point and numbers only
-    value = value.replace(/[^\d.]/g, '');
-    
-    // Prevent multiple decimal points
-    const parts = value.split('.');
-    if (parts.length > 2) {
-        value = parts[0] + '.' + parts.slice(1).join('');
-    }
-    
-    // Format with commas
-    if (value) {
-        const [integerPart, decimalPart] = value.split('.');
-        const formattedInteger = parseInt(integerPart || '0').toLocaleString('en-US');
-        input.value = decimalPart !== undefined ? formattedInteger + '.' + decimalPart : formattedInteger;
     }
 }
