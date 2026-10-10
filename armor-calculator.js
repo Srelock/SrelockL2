@@ -225,6 +225,12 @@ function updateArmorTotals() {
         return;
     }
 
+    if (Object.keys(totals).length === 0) {
+        totalsGrid.innerHTML = '<p class="armor-empty">No pieces selected. Pick at least one piece above to see the materials you need.</p>';
+        updateArmorCosts();
+        return;
+    }
+
     totalsGrid.innerHTML = Object.entries(totals)
         .map(([material, amount]) => {
             const displayValue = material === 'Adena'
