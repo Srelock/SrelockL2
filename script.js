@@ -225,7 +225,7 @@ function calculateHourlyRate() {
     const minutes = parseInt(document.getElementById('hourly-minutes').value) || 0;
 
     if (isNaN(amount) || amount < 0) {
-        showFormError('hourly-error', 'Enter the XP or adena you gained, as a positive number.', ['hourly-amount']);
+        showFormError('hourly-error', 'Enter the XP or Adena you gained, as a positive number.', ['hourly-amount']);
         return;
     }
     if (hours === 0 && minutes === 0) {
