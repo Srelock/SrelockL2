@@ -278,15 +278,17 @@ function parseFormattedNumber(value) {
 function formatCurrency(amount) {
     const roundedAmount = Math.round(amount);
     const formattedNumber = roundedAmount.toLocaleString('en-US');
+    // Non-breaking space keeps the suffix letter on the same line as its number.
+    const gap = '\u00A0';
 
     if (roundedAmount >= 1e12) {
-        return 'T ' + formattedNumber;
+        return 'T' + gap + formattedNumber;
     } else if (roundedAmount >= 1e9) {
-        return 'B ' + formattedNumber;
+        return 'B' + gap + formattedNumber;
     } else if (roundedAmount >= 1e6) {
-        return 'M ' + formattedNumber;
+        return 'M' + gap + formattedNumber;
     } else if (roundedAmount >= 1e3) {
-        return 'K ' + formattedNumber;
+        return 'K' + gap + formattedNumber;
     } else {
         return formattedNumber;
     }

@@ -337,10 +337,11 @@ input[type="checkbox"] {
 }
 
 .chip-value {
+    display: block;
     font-size: 1rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
 }
 
 /* Armor: piece selection */
