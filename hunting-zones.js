@@ -1,4 +1,4 @@
-// Teleport hunting zones above level 104. IDs match the game's teleport list
+// Teleport hunting zones above level 105. IDs match the game's teleport list
 // and are the keys of saved comparisons, so never renumber them.
 const HUNTING_ZONES = Object.freeze([
     { id: 69, name: 'Shadow of the Mother Tree', level: 130 },
@@ -37,6 +37,4 @@ const HUNTING_ZONES = Object.freeze([
     { id: 105, name: 'Forest of Mirrors', level: 108 },
     { id: 10, name: 'Tanor Canyon', level: 108 },
     { id: 276, name: 'Phantasmal Ridge', level: 106 },
-    { id: 384, name: 'Catacomb of Dark Omens', level: 105 },
-    { id: 385, name: "Disciple's Necropolis", level: 105 },
 ].map((zone) => Object.freeze(zone)));
