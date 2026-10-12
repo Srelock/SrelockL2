@@ -1,10 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
+    initThemePicker();
     initCalculatorTabs();
     initNumericClamping();
     initFieldTooltips();
     initDamageForm();
     initHourlyForm();
 });
+
+// Colour theme (the inline script in <head> applies the saved theme before paint)
+const THEME_STORAGE_KEY = 'l2calc.theme';
+
+function initThemePicker() {
+    const buttons = document.querySelectorAll('.theme-button');
+    const currentTheme = document.documentElement.dataset.theme || '';
+    buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.dataset.themeChoice === currentTheme ? 'true' : 'false');
+        button.addEventListener('click', () => applyTheme(button.dataset.themeChoice, buttons));
+    });
+}
+
+function applyTheme(theme, buttons) {
+    if (theme) {
+        document.documentElement.dataset.theme = theme;
+    } else {
+        delete document.documentElement.dataset.theme;
+    }
+    buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.dataset.themeChoice === theme ? 'true' : 'false');
+    });
+    try {
+        if (theme) {
+            localStorage.setItem(THEME_STORAGE_KEY, theme);
+        } else {
+            localStorage.removeItem(THEME_STORAGE_KEY);
+        }
+    } catch (error) {
+        console.warn('Could not save the colour theme.', error);
+    }
+}
 
 // Tabs (WAI-ARIA tabs pattern: click, arrow keys, Home/End)
 function initCalculatorTabs() {
