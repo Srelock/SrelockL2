@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
     <a class="skip-link" href="#calculators">Skip to calculators</a>
@@ -72,9 +72,10 @@
                     <p class="panel-note">Enter what you gained and how long it took. Fill in XP, Adena, or both.</p>
                     <div class="field">
                         <label for="hourly-zone">Hunting zone</label>
-                        <select id="hourly-zone">
+                        <select id="hourly-zone" aria-describedby="hourly-zone-hint">
                             <option value="">No zone selected</option>
                         </select>
+                        <p class="field-hint" id="hourly-zone-hint">* Party hunting zone</p>
                     </div>
                     <div class="field-row">
                         <div class="field">
@@ -127,7 +128,7 @@
                     <div class="compare-head">
                         <div>
                             <h2 id="zone-compare-title">Zone comparison</h2>
-                            <p class="panel-note">Your saved runs, stored only in this browser. The best rate in each column is highlighted.</p>
+                            <p class="panel-note">Your saved runs, stored only in this browser. The best rate in each column is highlighted, and * marks a party hunting zone.</p>
                         </div>
                         <div class="compare-sort" role="group" aria-label="Sort by">
                             <button type="button" class="sort-button active" data-sort="xp" aria-pressed="true">XP per hour</button>
@@ -227,8 +228,8 @@
     </div>
 
     <script src="script.js?v=5"></script>
-    <script src="hunting-zones.js?v=4"></script>
-    <script src="zone-compare.js?v=1"></script>
+    <script src="hunting-zones.js?v=5"></script>
+    <script src="zone-compare.js?v=2"></script>
     <script src="armor-calculator.js?v=2"></script>
 </body>
 </html>

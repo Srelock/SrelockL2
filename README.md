@@ -47,7 +47,7 @@ Calculates hourly rates for XP and Adena farming:
 
 ### Zone comparison
 
-Pick one of the 36 teleport hunting zones above level 105 (listed in `hunting-zones.js`), calculate a run, and click **Save to comparison**. Saved zones appear in a table that can be sorted by XP per hour or Adena per hour, with the best rate in each column highlighted. Results are stored in the browser's localStorage only; saving the same zone again replaces its earlier result.
+Pick one of the 36 teleport hunting zones above level 105 (listed in `hunting-zones.js`; party hunting zones are marked with `*`), calculate a run, and click **Save to comparison**. Saved zones appear in a table that can be sorted by XP per hour or Adena per hour, with the best rate in each column highlighted. Results are stored in the browser's localStorage only; saving the same zone again replaces its earlier result.
 
 ## Setup
 

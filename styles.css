@@ -264,6 +264,17 @@ input[aria-invalid="true"] {
     border-width: 2px;
 }
 
+.field-hint {
+    margin-top: var(--space-1);
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.party-mark {
+    color: var(--accent);
+    font-weight: 700;
+}
+
 .form-error {
     color: var(--danger);
     font-size: var(--text-sm);

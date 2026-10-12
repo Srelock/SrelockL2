@@ -1,5 +1,12 @@
 // Teleport hunting zones above level 105. IDs match the game's teleport list
 // and are the keys of saved comparisons, so never renumber them.
+
+// Zones listed under the in-game "Hunting Zones" (party) teleport tab.
+const PARTY_ZONE_IDS = new Set([
+    2, 4, 10, 33, 66, 79, 132, 134, 137, 148, 189,
+    195, 205, 207, 211, 387, 425, 426, 437, 438, 443, 444,
+]);
+
 const HUNTING_ZONES = Object.freeze([
     { id: 69, name: 'Shadow of the Mother Tree', level: 130 },
     { id: 132, name: 'Kasha Orc Fortress', level: 130 },
@@ -37,4 +44,4 @@ const HUNTING_ZONES = Object.freeze([
     { id: 105, name: 'Forest of Mirrors', level: 108 },
     { id: 10, name: 'Tanor Canyon', level: 108 },
     { id: 276, name: 'Phantasmal Ridge', level: 106 },
-].map((zone) => Object.freeze(zone)));
+].map((zone) => Object.freeze({ ...zone, isParty: PARTY_ZONE_IDS.has(zone.id) })));

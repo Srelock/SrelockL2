@@ -18,7 +18,7 @@
         HUNTING_ZONES.forEach((zone) => {
             const option = document.createElement('option');
             option.value = String(zone.id);
-            option.textContent = `${zone.name} (Lv. ${zone.level})`;
+            option.textContent = `${zone.name} (Lv. ${zone.level})${zone.isParty ? ' *' : ''}`;
             select.appendChild(option);
         });
     }
@@ -169,7 +169,7 @@
         const zone = ZONES_BY_ID.get(entry.zoneId);
         const row = document.createElement('tr');
         row.append(
-            buildCell('Zone', zone.name, 'th'),
+            buildZoneCell(zone),
             buildCell('Level', String(zone.level)),
             buildRateCell('XP per hour', entry.xpPerHour, bestXp),
             buildRateCell('Adena per hour', entry.adenaPerHour, bestAdena),
@@ -185,6 +185,21 @@
         }
         cell.dataset.label = label;
         cell.textContent = text;
+        return cell;
+    }
+
+    function buildZoneCell(zone) {
+        const cell = buildCell('Zone', zone.name, 'th');
+        if (zone.isParty) {
+            const mark = document.createElement('span');
+            mark.className = 'party-mark';
+            mark.setAttribute('aria-hidden', 'true');
+            mark.textContent = ' *';
+            const note = document.createElement('span');
+            note.className = 'visually-hidden';
+            note.textContent = ' (party zone)';
+            cell.append(mark, note);
+        }
         return cell;
     }
 
