@@ -67,7 +67,9 @@ function initFieldTooltips() {
     const tooltips = {
         'your-level': 'Your character\'s current level',
         'mob-level': 'The level of the monster you are fighting',
-        'hourly-amount': 'Amount of XP or Adena earned',
+        'hourly-zone': 'Where you farmed, needed to save the run for comparison',
+        'hourly-xp': 'Amount of XP earned',
+        'hourly-adena': 'Amount of Adena earned',
         'hourly-hours': 'Hours spent farming',
         'hourly-minutes': 'Minutes spent farming'
     };
@@ -99,16 +101,18 @@ function initHourlyForm() {
         });
     }
 
-    const amountInput = document.getElementById('hourly-amount');
     const hoursInput = document.getElementById('hourly-hours');
     const minutesInput = document.getElementById('hourly-minutes');
 
-    if (amountInput) {
-        amountInput.addEventListener('input', function() {
-            formatNumber(this);
-            scheduleHourlyAutoCalc();
-        });
-    }
+    HOURLY_AMOUNT_IDS.forEach((id) => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', function() {
+                formatNumber(this);
+                scheduleHourlyAutoCalc();
+            });
+        }
+    });
     [hoursInput, minutesInput].forEach((input) => {
         if (input) {
             input.addEventListener('input', scheduleHourlyAutoCalc);
@@ -123,18 +127,36 @@ function initHourlyForm() {
     }
 }
 
+const HOURLY_AMOUNT_IDS = ['hourly-xp', 'hourly-adena'];
+const HOURLY_TIME_IDS = ['hourly-hours', 'hourly-minutes'];
 let hourlyAutoCalcTimer = null;
 
 function scheduleHourlyAutoCalc() {
     clearTimeout(hourlyAutoCalcTimer);
     hourlyAutoCalcTimer = setTimeout(() => {
-        const amount = parseFormattedNumber(document.getElementById('hourly-amount').value);
-        const hours = parseInt(document.getElementById('hourly-hours').value) || 0;
-        const minutes = parseInt(document.getElementById('hourly-minutes').value) || 0;
-        if ((hours > 0 || minutes > 0) && !isNaN(amount) && amount > 0) {
+        const run = readHourlyRun();
+        if (run.totalHours > 0 && (run.xp !== null || run.adena !== null)) {
             calculateHourlyRate();
+        } else {
+            resetHourlyResults();
         }
     }, 500);
+}
+
+// Amounts that are empty, zero or unparseable count as "not entered" (null).
+function readHourlyAmount(id) {
+    const amount = parseFormattedNumber(document.getElementById(id).value);
+    return !isNaN(amount) && amount > 0 ? amount : null;
+}
+
+function readHourlyRun() {
+    const hours = parseInt(document.getElementById('hourly-hours').value) || 0;
+    const minutes = parseInt(document.getElementById('hourly-minutes').value) || 0;
+    return {
+        xp: readHourlyAmount('hourly-xp'),
+        adena: readHourlyAmount('hourly-adena'),
+        totalHours: hours + (minutes / 60),
+    };
 }
 
 // Inline form errors (replace alert pop-ups)
@@ -220,33 +242,39 @@ function calculateDamagePenalty() {
 
 // Hourly Rate Calculator
 function calculateHourlyRate() {
-    const amount = parseFormattedNumber(document.getElementById('hourly-amount').value);
-    const hours = parseInt(document.getElementById('hourly-hours').value) || 0;
-    const minutes = parseInt(document.getElementById('hourly-minutes').value) || 0;
+    const run = readHourlyRun();
 
-    if (isNaN(amount) || amount < 0) {
-        showFormError('hourly-error', 'Enter the XP or Adena you gained, as a positive number.', ['hourly-amount']);
+    if (run.xp === null && run.adena === null) {
+        showFormError('hourly-error', 'Enter the XP or Adena you gained (at least one), as a positive number.', HOURLY_AMOUNT_IDS);
+        resetHourlyResults();
         return;
     }
-    if (hours === 0 && minutes === 0) {
-        showFormError('hourly-error', 'Enter a time longer than 0 minutes.', ['hourly-hours', 'hourly-minutes']);
+    if (run.totalHours <= 0) {
+        showFormError('hourly-error', 'Enter a time longer than 0 minutes.', HOURLY_TIME_IDS);
+        resetHourlyResults();
         return;
     }
-    clearFormError('hourly-error', ['hourly-amount', 'hourly-hours', 'hourly-minutes']);
+    clearFormError('hourly-error', [...HOURLY_AMOUNT_IDS, ...HOURLY_TIME_IDS]);
 
-    // Convert time to total hours
-    const totalHours = hours + (minutes / 60);
+    const xpPerHour = run.xp === null ? null : run.xp / run.totalHours;
+    const adenaPerHour = run.adena === null ? null : run.adena / run.totalHours;
+    showHourlyRates(xpPerHour, adenaPerHour);
+    document.dispatchEvent(new CustomEvent('hourlyrate:calculated', {
+        detail: { xpPerHour, adenaPerHour },
+    }));
+}
 
-    // Calculate hourly rate
-    const hourlyRate = amount / totalHours;
+function showHourlyRates(xpPerHour, adenaPerHour) {
+    const display = (value) => (value === null ? '—' : formatCurrency(value));
+    document.getElementById('hourly-xp-rate').textContent = display(xpPerHour);
+    document.getElementById('hourly-xp-3h').textContent = display(xpPerHour === null ? null : xpPerHour * 3);
+    document.getElementById('hourly-adena-rate').textContent = display(adenaPerHour);
+    document.getElementById('hourly-adena-3h').textContent = display(adenaPerHour === null ? null : adenaPerHour * 3);
+}
 
-    // Calculate amounts for 1 hour and 3 hours
-    const oneHourAmount = hourlyRate * 1;
-    const threeHoursAmount = hourlyRate * 3;
-
-    document.getElementById('hourly-rate').textContent = formatCurrency(hourlyRate);
-    document.getElementById('one-hour-amount').textContent = formatCurrency(oneHourAmount);
-    document.getElementById('three-hours-amount').textContent = formatCurrency(threeHoursAmount);
+function resetHourlyResults() {
+    showHourlyRates(null, null);
+    document.dispatchEvent(new CustomEvent('hourlyrate:cleared'));
 }
 
 // Helper function to format number with commas

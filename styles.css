@@ -64,9 +64,22 @@ h1, h2, h3, h4, p {
 }
 
 button,
-input {
+input,
+select {
     font: inherit;
     color: inherit;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 button {
@@ -137,7 +150,8 @@ button {
 }
 
 .tab-button,
-.armor-type-tab {
+.armor-type-tab,
+.sort-button {
     min-height: 48px;
     padding: 0 var(--space-2);
     border: 0;
@@ -148,7 +162,8 @@ button {
 }
 
 .tab-button.active,
-.armor-type-tab.active {
+.armor-type-tab.active,
+.sort-button.active {
     color: var(--accent);
     font-weight: 700;
     box-shadow: var(--raised-sm);
@@ -176,6 +191,10 @@ button {
     border-radius: var(--radius);
     box-shadow: var(--raised);
     min-width: 0;
+}
+
+.panel--wide {
+    grid-column: 1 / -1;
 }
 
 .panel h2 {
@@ -214,15 +233,30 @@ label {
 }
 
 input[type="number"],
-input[type="text"] {
+input[type="text"],
+select {
     width: 100%;
     min-height: 52px;
     padding: 0 var(--space-2);
     border: 1px solid var(--edge);
     border-radius: var(--radius-sm);
-    background: var(--surface);
+    background-color: var(--surface);
     box-shadow: var(--inset);
     font-variant-numeric: tabular-nums;
+}
+
+select {
+    appearance: none;
+    padding-right: var(--space-5);
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--text) 50%),
+        linear-gradient(135deg, var(--text) 50%, transparent 50%);
+    background-position:
+        calc(100% - 22px) 50%,
+        calc(100% - 16px) 50%;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
 
 input[aria-invalid="true"] {
@@ -276,6 +310,16 @@ input[type="checkbox"] {
 
 .btn-secondary:active {
     box-shadow: var(--inset);
+}
+
+.btn-secondary:disabled {
+    color: var(--muted);
+    box-shadow: var(--inset);
+    cursor: not-allowed;
+}
+
+.btn-block {
+    width: 100%;
 }
 
 .btn-tertiary {
@@ -342,6 +386,113 @@ input[type="checkbox"] {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     overflow-wrap: anywhere;
+}
+
+/* Hourly: rates, save, comparison */
+#hourly-result {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.rate-card {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    box-shadow: var(--inset);
+}
+
+.rate-value {
+    font-size: var(--text-display-long);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    margin-bottom: var(--space-1);
+}
+
+.rate-card .chip {
+    box-shadow: var(--raised-sm);
+}
+
+.save-status {
+    margin-top: var(--space-2);
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.compare-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-2) var(--space-3);
+}
+
+.compare-sort {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius);
+    box-shadow: var(--inset);
+}
+
+.compare-empty {
+    color: var(--muted);
+}
+
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.compare-table th,
+.compare-table td {
+    padding: 12px var(--space-2);
+    text-align: left;
+    border-top: 1px solid var(--hairline);
+    overflow-wrap: anywhere;
+}
+
+.compare-table thead th {
+    border-top: 0;
+    color: var(--muted);
+    font-size: var(--text-sm);
+}
+
+.compare-table thead th,
+.compare-table td:nth-child(2),
+.compare-actions {
+    white-space: nowrap;
+    overflow-wrap: normal;
+}
+
+.compare-table tbody th {
+    font-weight: 700;
+}
+
+.compare-table td.is-best {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.compare-actions {
+    text-align: right;
+}
+
+.compare-actions .btn-tertiary {
+    min-height: 44px;
+    padding: 0 var(--space-1);
+}
+
+#zone-compare-clear {
+    margin-top: var(--space-2);
+    padding-left: 0;
 }
 
 /* Armor: piece selection */
@@ -533,9 +684,76 @@ input[type="checkbox"] {
     gap: var(--space-1);
 }
 
+@media (max-width: 720px) {
+    .compare-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+    }
+
+    .compare-table,
+    .compare-table tbody,
+    .compare-table tr,
+    .compare-table th,
+    .compare-table td {
+        display: block;
+    }
+
+    .compare-table tr {
+        padding: var(--space-2);
+        margin-bottom: var(--space-2);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--inset);
+    }
+
+    .compare-table th,
+    .compare-table td {
+        padding: var(--space-1) 0;
+        border-top: 0;
+    }
+
+    .compare-table tbody th {
+        padding-top: 0;
+    }
+
+    .compare-table td {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0 var(--space-2);
+        border-top: 1px solid var(--hairline);
+        overflow-wrap: break-word;
+    }
+
+    .compare-table td::before {
+        content: attr(data-label);
+        flex-shrink: 0;
+        color: var(--muted);
+        font-size: var(--text-sm);
+        font-weight: 400;
+        text-align: left;
+    }
+
+    .compare-actions {
+        padding-bottom: 0;
+    }
+
+    .compare-table td.compare-actions::before {
+        content: none;
+    }
+
+    .compare-actions .btn-tertiary {
+        padding-left: 0;
+    }
+}
+
 @media (hover: hover) and (pointer: fine) {
     .tab-button:hover,
-    .armor-type-tab:hover {
+    .armor-type-tab:hover,
+    .sort-button:hover {
         color: var(--text);
     }
 
@@ -558,12 +776,14 @@ input[type="checkbox"] {
     }
 
     .calculator-tabs,
-    .armor-type-tabs {
+    .armor-type-tabs,
+    .compare-sort {
         display: flex;
     }
 
     .tab-button,
-    .armor-type-tab {
+    .armor-type-tab,
+    .sort-button {
         flex: 1 1 auto;
     }
 }
@@ -588,7 +808,9 @@ input[type="checkbox"] {
     .armor-piece-card,
     .armor-cost-section,
     .calculator-tabs,
-    .armor-type-tabs {
+    .armor-type-tabs,
+    .rate-card,
+    .compare-sort {
         border: 1px solid CanvasText;
     }
 }

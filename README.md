@@ -13,6 +13,8 @@ A standalone calculator for Lineage 2 game mechanics, including damage penalty c
 - `index.html` - Main HTML file
 - `styles.css` - CSS styles for the calculator
 - `script.js` - JavaScript functionality
+- `hunting-zones.js` - Hunting zone names and levels
+- `zone-compare.js` - Zone comparison (save, sort, remove)
 
 ## Usage
 
@@ -37,11 +39,15 @@ Calculates adena trading costs, profits, and coin conversion rates:
 
 ## Hourly Rate Calculator
 
-Calculates hourly rates for XP or Adena farming:
-- **Input**: Amount earned and time spent
-- **Output**: Hourly rate, 1-hour projection, and 3-hour projection
+Calculates hourly rates for XP and Adena farming:
+- **Input**: XP gained, Adena gained (either or both), and time spent
+- **Output**: XP per hour and Adena per hour, each with a 3-hour projection
 - **Auto-calculation**: Real-time updates as you type
 - **Number formatting**: Automatic comma formatting for large numbers
+
+### Zone comparison
+
+Pick one of the 37 teleport hunting zones above level 104 (listed in `hunting-zones.js`), calculate a run, and click **Save to comparison**. Saved zones appear in a table that can be sorted by XP per hour or Adena per hour, with the best rate in each column highlighted. Results are stored in the browser's localStorage only; saving the same zone again replaces its earlier result.
 
 ## Setup
 

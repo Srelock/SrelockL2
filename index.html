@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
     <a class="skip-link" href="#calculators">Skip to calculators</a>
@@ -69,10 +69,22 @@
             <section class="calculator-content active" id="hourly" role="tabpanel" aria-labelledby="tab-hourly">
                 <form class="panel" id="hourly-form" novalidate>
                     <h2>XP and Adena per hour</h2>
-                    <p class="panel-note">Enter what you gained and how long it took.</p>
+                    <p class="panel-note">Enter what you gained and how long it took. Fill in XP, Adena, or both.</p>
                     <div class="field">
-                        <label for="hourly-amount">XP or Adena gained</label>
-                        <input type="text" id="hourly-amount" inputmode="decimal" autocomplete="off" aria-describedby="hourly-error">
+                        <label for="hourly-zone">Hunting zone</label>
+                        <select id="hourly-zone">
+                            <option value="">No zone selected</option>
+                        </select>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="hourly-xp">XP gained</label>
+                            <input type="text" id="hourly-xp" inputmode="decimal" autocomplete="off" aria-describedby="hourly-error">
+                        </div>
+                        <div class="field">
+                            <label for="hourly-adena">Adena gained</label>
+                            <input type="text" id="hourly-adena" inputmode="decimal" autocomplete="off" aria-describedby="hourly-error">
+                        </div>
                     </div>
                     <div class="field-row">
                         <div class="field">
@@ -90,23 +102,52 @@
 
                 <div class="panel">
                     <div class="result" id="hourly-result">
-                        <div class="dial">
-                            <div>
-                                <p class="dial-label">Per hour</p>
-                                <p class="dial-value dial-value--long" id="hourly-rate">—</p>
-                            </div>
-                        </div>
-                        <div class="chips">
-                            <div class="chip">
-                                <span class="chip-label">1 hour</span>
-                                <span class="chip-value" id="one-hour-amount">—</span>
-                            </div>
+                        <div class="rate-card">
+                            <p class="dial-label">XP per hour</p>
+                            <p class="rate-value" id="hourly-xp-rate">—</p>
                             <div class="chip">
                                 <span class="chip-label">3 hours</span>
-                                <span class="chip-value" id="three-hours-amount">—</span>
+                                <span class="chip-value" id="hourly-xp-3h">—</span>
+                            </div>
+                        </div>
+                        <div class="rate-card">
+                            <p class="dial-label">Adena per hour</p>
+                            <p class="rate-value" id="hourly-adena-rate">—</p>
+                            <div class="chip">
+                                <span class="chip-label">3 hours</span>
+                                <span class="chip-value" id="hourly-adena-3h">—</span>
                             </div>
                         </div>
                     </div>
+                    <button type="button" class="btn-secondary btn-block" id="zone-save" disabled>Save to comparison</button>
+                    <p class="save-status" id="zone-save-status" role="status">Pick a hunting zone and calculate to save this run.</p>
+                </div>
+
+                <div class="panel panel--wide">
+                    <div class="compare-head">
+                        <div>
+                            <h2 id="zone-compare-title">Zone comparison</h2>
+                            <p class="panel-note">Your saved runs, stored only in this browser. The best rate in each column is highlighted.</p>
+                        </div>
+                        <div class="compare-sort" role="group" aria-label="Sort by">
+                            <button type="button" class="sort-button active" data-sort="xp" aria-pressed="true">XP per hour</button>
+                            <button type="button" class="sort-button" data-sort="adena" aria-pressed="false">Adena per hour</button>
+                        </div>
+                    </div>
+                    <p class="compare-empty" id="zone-compare-empty">No zones saved yet. Pick a zone, enter a run, and click Save to comparison.</p>
+                    <table class="compare-table" id="zone-compare-table" aria-labelledby="zone-compare-title" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col">Zone</th>
+                                <th scope="col">Level</th>
+                                <th scope="col">XP per hour</th>
+                                <th scope="col">Adena per hour</th>
+                                <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="zone-compare-body"></tbody>
+                    </table>
+                    <button type="button" class="btn-tertiary" id="zone-compare-clear" hidden>Clear all</button>
                 </div>
             </section>
 
@@ -185,7 +226,9 @@
         </footer>
     </div>
 
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
+    <script src="hunting-zones.js?v=1"></script>
+    <script src="zone-compare.js?v=1"></script>
     <script src="armor-calculator.js?v=2"></script>
 </body>
 </html>
